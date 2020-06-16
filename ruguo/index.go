@@ -2,11 +2,19 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"strings"
 	"text/template"
 )
+
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
+}
 
 func main() {
 	var (
@@ -22,6 +30,8 @@ func main() {
 	fmt.Scanln(&dateInput)
 	// 模板定义
 	tepl := `
+----{{.name}}---->
+
 亲爱的 {{.name}}：
 
   恭喜你成功通过面试，加入如果青年第11期36小时生活实验室。🎉🎉🎉🎉🎉🎉
@@ -38,22 +48,35 @@ func main() {
   感谢小伙伴对实验室的支持与热爱，期待周末同你们美妙相遇
  
 可爱又迷人的如果青年
+
+<----{{.name}}---- 
 `
 	// 解析模板
 	tmpl, _ := template.New("test").Parse(tepl)
+	buf := new(bytes.Buffer)
 	for _, name := range namesList {
-		fmt.Printf("----%s----> \n", name)
 		// 使用data渲染模板，并将结果写入os.Stdout
-		tmpl.Execute(os.Stdout, map[string]interface{}{
+		//tmpl.Execute(os.Stdout, map[string]interface{}{
+		//	"name":    name,
+		//	"address": addressInput,
+		//	"time":    dateInput,
+		//})
+		// 使用os.Stdout,只能输出到控制台，但是我又想将获得的输出模版变成字符串，在其他地方使用。
+
+		// 要修改os.Stdout,那么就要找一个实现了 io.Writer 接口的输出, bytes.Buffer 实现了io.Writer接口
+		tmpl.Execute(buf, map[string]interface{}{
 			"name":    name,
 			"address": addressInput,
 			"time":    dateInput,
 		})
-		fmt.Printf("\n")
-		fmt.Printf("<----%s---- \n", name)
 	}
-
-	// 提示用户
-	fmt.Printf("\n \n 运行结束啦(￣３￣)a，请按下Enter键关闭该页面")
+	writeString := buf.String()
+	d1 := []byte(writeString)
+	filename := "./output.text"
+	err2 := ioutil.WriteFile(filename, d1, 0666)
+	check(err2)
+	// 提示用户信息
+	outputPath, _ := os.Getwd()
+	fmt.Printf("\n \n 运行结束啦(￣３￣)a，\n 1. 请到此位置 %s 打开output.text文件 \n 2. 请按下Enter键关闭该页面", outputPath)
 	fmt.Scanln(&tem)
 }
