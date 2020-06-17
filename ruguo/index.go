@@ -6,15 +6,12 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"personal/go_test/ruguo/utils"
 	"strings"
 	"text/template"
 )
 
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
+
 
 func main() {
 	var (
@@ -30,7 +27,7 @@ func main() {
 	fmt.Scanln(&dateInput)
 	// 模板定义
 	tepl := `
-----{{.name}}---->
+------------{{.name}}------------>
 
 亲爱的 {{.name}}：
 
@@ -49,7 +46,7 @@ func main() {
  
 可爱又迷人的如果青年
 
-<----{{.name}}---- 
+<------------{{.name}}------------ 
 `
 	// 解析模板
 	tmpl, _ := template.New("test").Parse(tepl)
@@ -74,7 +71,7 @@ func main() {
 	d1 := []byte(writeString)
 	filename := "./output.text"
 	err2 := ioutil.WriteFile(filename, d1, 0666)
-	check(err2)
+	utils.Check(err2)
 	// 提示用户信息
 	outputPath, _ := os.Getwd()
 	fmt.Printf("\n \n 运行结束啦(￣３￣)a，\n 1. 请到此位置 %s 打开output.text文件 \n 2. 请按下Enter键关闭该页面", outputPath)
