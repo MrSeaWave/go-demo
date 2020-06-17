@@ -53,6 +53,6 @@ func main() {
 
 	// 提示用户信息
 	outputPath, _ := os.Getwd()
-	fmt.Printf("\n \n 运行结束啦(￣３￣)a，\n 1. 请到此位置 %s 未参加面试.text文件 \n 2. 请按下Enter键关闭该页面", outputPath)
+	fmt.Printf("\n \n 运行结束啦(￣３￣)a，\n 1. 请到此位置 %s 打开 未参加面试.text文件 \n 2. 请按下Enter键关闭该页面", outputPath)
 	fmt.Scanln(&tem)
 }
